@@ -17,6 +17,7 @@ import AllCompany from './screens/TimeLine/Admin/Company/AllCompany'
 import BlockedCompany from './screens/TimeLine/Admin/Company/BlockCompany'
 import UnblockCompany from './screens/TimeLine/Admin/Company/UnblockCompany'
 import AppliedCompany from './screens/Applied/Applied'
+import Applicants from './screens/Applicants/Applicants'
 
 
 const getRoutes = status => {
@@ -29,7 +30,6 @@ const getRoutes = status => {
         <Redirect to="/signin" />
       </Switch>
     );
-      console.log("stattus",status)
     // routes for admin
     if (status === 1) {
       routes = (
@@ -50,7 +50,6 @@ const getRoutes = status => {
   
     // routes for students
     if (status === 2) {
-      console.log("status", status);
       routes = (
         <Switch>
           <Route path="/timeline/student" exact component={StudentTimeline} />
@@ -68,8 +67,7 @@ const getRoutes = status => {
         <Switch>
           <Route path="/timeline/company" exact component={CompanyTimeline} />
           <Route path="/company/profile" exact component={CompanyProfile} />          
-          {/* <Route path="/company/applicants" exact components={Applicants}/>
-          <Route path="/company/applicants/accepted" exact components={AcceptedApplicants} /> */}
+          <Route path="/company/applicants" exact component={Applicants}/>
           <Route path="/company/student/profile/:id" component={StudentView} />
           <Redirect to="/timeline/company" />
         </Switch>

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import './Signup.css'
 import Input from '../../../components/Input'
 import { createuser } from '../../../store/actions/action'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+import Spinner from '../../../components/Spinner/Spinner'
 
 class Signup extends Component {
     state = {
@@ -28,16 +29,23 @@ class Signup extends Component {
     onSubmitHandler = () => {
         const { company, email, password, cpassword, owner, initials, ntn, applicants, accepted, business, type, block } = this.state;
         if (company && email && password && cpassword && owner && ntn && business) {
-            if (password === cpassword) {
-                this.setState({
-                    err: ""
-                })
-                let data = { company, email, ntn, applicants, initials,owner, business, accepted, type, block }
-                this.props.createuser(data,this.props.history,password)
+            if (company.length < 20) {
+                if (password === cpassword) {
+                    this.setState({
+                        err: ""
+                    })
+                    let data = { company, email, ntn, applicants, initials, owner, business, accepted, type, block }
+                    this.props.createuser(data, this.props.history, password)
+                }
+                else {
+                    this.setState({
+                        err: "passwords doesn't matched"
+                    })
+                }
             }
             else {
                 this.setState({
-                    err: "passwords doesn't matched"
+                    err: "Maximum length of Company's name should be 20 characters"
                 })
             }
         }
@@ -50,22 +58,35 @@ class Signup extends Component {
     }
     render() {
         let errMsg = ""
+        let displayButton = (
+            <div className="btnGroup">
+                <input type="button" className='btn btn-primary ' value="Signup" style={{ width: "30%", marginRight: 10 }}
+                    onClick={this.onSubmitHandler}
+                />
+                <input type="button" className='btn btn-primary ' value="Back" style={{ width: "30%", }}
+                    onClick={this.onSubmitHandler}
+                />
+            </div>
+        )
+        if(this.props.loading){
+            displayButton=<Spinner />
+        }
         console.log(this.props.error)
         if (this.state.err) {
             errMsg = (
                 <div className="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>{this.state.err}</strong>
-                      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             )
         }
-        else if(this.props.error) {
+        else if (this.props.error) {
             errMsg = (
                 <div className="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>{this.props.error}</strong>
-                      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -139,14 +160,7 @@ class Signup extends Component {
                                 placeholder="type"
                             />
                             {errMsg}
-                            <div className="btnGroup">
-                                <input type="button" className='btn btn-primary ' value="Signup" style={{ width: "30%", marginRight: 10 }}
-                                    onClick={this.onSubmitHandler}
-                                />
-                                <input type="button" className='btn btn-primary ' value="Back" style={{ width: "30%", }}
-                                    onClick={this.onSubmitHandler}
-                                />
-                            </div>
+                            {displayButton}
                         </div>
                     </div>
                     <div className='col-2'>
@@ -156,8 +170,8 @@ class Signup extends Component {
         )
     }
 }
-const mapStateToProps=state=>{
-    const {error}=state
-    return {error}
+const mapStateToProps = state => {
+    const { error,loading } = state
+    return { error,loading }
 }
 export default connect(mapStateToProps, { createuser })(Signup)

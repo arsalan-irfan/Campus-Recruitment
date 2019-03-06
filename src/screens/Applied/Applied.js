@@ -17,24 +17,15 @@ class Applied extends Component {
         for(let id in currentUser.applied){
           result.push(currentUser.applied[id]);
         }
-        console.log("as",result,profiles)
         this.props.appliedFetch(result,profiles)
       } 
   }
   render() {
-    let blockMsg=""
-    let block = null;
+    let displayProfiles = <h4 style={{color:"steelblue"}}>No Companies To Display</h4>
     if(this.props.currentUser.block){
-      blockMsg="Note:You are blocked by admin so your profile will not be visible to Students and some features might be un available"
-      block=(
-        <div className="alert alert-warning mt-5 " role="alert">
-              {blockMsg}
-            </div>
-      )
+      displayProfiles = <h3 style={{color:"red"}}>Applied Companies are enable to display in block mode</h3>   
     }
-    console.log("Applied"+this.props.appliedCompany)
-    let displayProfiles = <h4 style={{color:"steelblue"}}>No Profiles To Display</h4>
-    console.log(this.props.appliedCompany)
+    
     if (this.props.appliedCompany && this.props.appliedCompany.length > 0) {
       const { appliedCompany } = this.props
       displayProfiles = appliedCompany.map((profile, index) => {
@@ -44,15 +35,10 @@ class Applied extends Component {
         else return null
       })
     }
-    console.log("here",displayProfiles);
-    console.log("Applied Company", this.props.appliedCompany);
     return (
       <div>
         <Navbar />
         <br/><br />       
-        <div style={{marginTop:100}}>
-            {block}
-        </div>
         <div className="container text-center">
           <div className="card-container">
             {displayProfiles}

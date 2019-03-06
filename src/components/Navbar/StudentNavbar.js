@@ -28,7 +28,7 @@ const studentNavbar = (props) => {
           </li>
         </ul>
         <div className="nav-item">
-          <span>{firstname} {lastname}</span>
+          <span style={{fontWeight:"bold", marginRight: 10,}} >{firstname} {lastname}</span>
         </div>
         <div className="nav-item">
           <Avatar letters={initials} />

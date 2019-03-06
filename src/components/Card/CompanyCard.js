@@ -23,7 +23,6 @@ class CompanyCard extends Component {
 
   }
   onApply = (flag) => {
-    console.log("flag:",flag)    
     let appliedCompany = []
     let applicants = []
     const { data, currentUser } = this.props;
@@ -42,7 +41,6 @@ class CompanyCard extends Component {
       appliedCompany = currentUser.applied.filter(id => {
         return id !== data.uuid
       })
-      console.log("Applicants:", data.applicants)
       if(data.applicants){
         applicants = data.applicants.filter(id => {
           return id !== currentUser.uuid
@@ -50,10 +48,11 @@ class CompanyCard extends Component {
     }
   }
   this.props.applyCompany(currentUser.uuid, data.uuid, appliedCompany, applicants);
-
+  this.props.history.replace(`/student/timeline`)
 }
 
   render() {
+    console.log("-----------------------------------------------------")
     const styles = {
       card: {
         maxWidth: 345,
@@ -70,9 +69,8 @@ class CompanyCard extends Component {
     let applyBtn = { text: "Apply", flag: 1 }
     let temp = false;
     const {currentUser, data} = this.props;
-    console.log("Applied"+currentUser.applied)
     temp = currentUser.applied && isArray(currentUser.applied) ? currentUser.applied.find(apply => apply === data.uuid) : false;
-    console.log(data.company + ":" + temp)
+    console.log(data.company+"In temp:"+temp)
     if (temp) {
       applyBtn = { text: "Un Apply", flag: 2 }
     }

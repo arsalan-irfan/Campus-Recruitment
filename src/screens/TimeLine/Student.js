@@ -35,9 +35,7 @@ class Student extends Component {
         else return null
       })
       loading = null
-      console.log("display", profiles);
     }
-    console.log("In Student TimeLine", this.props.profiles);
     return (
       <div>
         <Navbar /> 

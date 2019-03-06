@@ -11,7 +11,7 @@ import Spinner from '../../components/Spinner/Spinner'
 
 class Login extends Component {
     state = {
-        email: "zain123@gmail.com",
+        email: "admin@admin.com",
         password: "password"
     }
     onHandleChange = (field, value) => {
@@ -90,7 +90,7 @@ class Login extends Component {
                             </div>
                             <hr />
                             <div>
-                                <h3 style={{ color: "steelblue", fontWeight: "bold", borderTopWidth: 1, borderTopColor: "grey", borderTopStyle: "solid", paddingTop: 10, }}>
+                                <h3 style={{ color: "steelblue", fontWeight: "bold", borderTopWidth: 1, borderTopColor: "grey", borderTopStyle: "solid", padding: 10, }}>
                                     Signup As:
                                 </h3>
 

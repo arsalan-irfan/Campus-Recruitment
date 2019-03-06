@@ -15,74 +15,87 @@ class OwnProfile extends Component {
         initials: this.props.currentUser.initials,
         degree: this.props.currentUser.degree,
         subject: this.props.currentUser.subject,
-        applied: this.props.currentUser.applied?this.props.currentUser.applied:{},
+        applied: this.props.currentUser.applied ? this.props.currentUser.applied : {},
         type: "Student",
         uuid: this.props.currentUser.uuid,
         block: this.props.currentUser.block,
-        err:"",
-        pass:true
+        err: "",
+        pass: true
     }
 
-    checkFields(){
-        console.log("In Check Fields")
-        const { firstname, lastname,institute,gpa, dob, degree, subject } = this.state;
-        if (firstname && lastname && institute && gpa && dob && degree && subject ) {
-            console.log("Fields Filled")
-            this.setState({
-                pass:true
-            })
-        }
-        else{
-            console.log("Field Empty")
-            this.setState({
-                pass:false
-            })
-        }
+    setError = (err) => {
+        this.setState({
+            err
+        })
     }
-    
+
     onHandleChange = (field, value) => {
         this.setState({
             [field]: value
         })
     }
 
-    onUpdatePressed=()=>{
+    onUpdatePressed = () => {
         //this.checkFields()
-        if(this.state.pass){
-            const {firstname,lastname,institute,gpa,email,applied,block,dob,initials,type,subject,uuid} = this.state
-            let data={}
-            const {currentUser}=this.props
-            if(firstname===currentUser.firstname&&lastname===currentUser.lastname&&institute===currentUser.institute&&gpa===currentUser.gpa&&dob===currentUser.dob&&subject===currentUser.subject){
-                console.log("No changes is being made")
-                this.setState({
-                    err:"No changes is being made"
-                })
+        const { firstname, lastname, institute, gpa,degree, email, applied, block, dob, initials, type, subject, uuid } = this.state
+        if (firstname.length <= 15) {
+            if (lastname.length <= 15) {
+                if (gpa >= 0 && gpa <= 4) {
+                    let bday = new Date(dob);
+                    let today = new Date();
+                    let diff = today.getFullYear() - bday.getFullYear();
+                    if (diff >= 20) {
+                        if (firstname && lastname && email &&  institute && gpa && dob && degree && subject && type) {
+                            let data = {}
+                            const { currentUser } = this.props
+                            if (firstname === currentUser.firstname && lastname === currentUser.lastname && institute === currentUser.institute && gpa === currentUser.gpa && dob === currentUser.dob && subject === currentUser.subject) {
+                                console.log("No changes is being made")
+                                this.setState({
+                                    err: "No changes is being made"
+                                })
+                            }
+                            else {
+                                this.setState({
+                                    err: ""
+                                })
+                                data = { firstname, lastname, institute, email, applied, gpa, dob, block, initials, type, subject, uuid }
+                                updateUser(data, this.props.history);
+                            }
+                        }
+                        else {
+                            this.setState({
+                                err: "Please fill all field"
+                            })
+                        }
+                    }
+                    else {
+                        this.setError("Your age is not enough to update")
+                    }
+                }
+                else {
+                    this.setError("Enter Valid GPA")
+                }
             }
-            else{
-                this.setState({
-                    err:""
-                })
-                data={firstname,lastname,institute,email,applied,gpa,dob,block,initials,type,subject,uuid}
-                updateUser(data,this.props.history);
+            else {
+                console.log(lastname.length)
+                this.setError("Maximum length of lastname should be 15 characters")
             }
         }
-        else{
-            this.setState({
-                err:"Some fields are empty!"
-            })
+        else {
+            console.log(firstname.length)
+            this.setError("Maximum length of firstname should be 15 characters")
         }
-        
+
+
+
     }
-    
+
     render() {
         let errMsg = ""
         if (this.state.err) {
             errMsg = (
-                <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                <div className="alert alert-danger" role="alert">
                     <strong>{this.state.err}</strong>
-                      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             )
         }
@@ -90,7 +103,7 @@ class OwnProfile extends Component {
             <div>
                 <Navbar />
 
-                <div className="row mt-5">
+                <div className="row "style={{marginTop:100}}>
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
@@ -118,7 +131,7 @@ class OwnProfile extends Component {
                                 value={this.state.lastname}
                                 disable={false}
                             />
-                            
+
                             <Input
                                 type="text"
                                 field="degree"
@@ -185,9 +198,9 @@ class OwnProfile extends Component {
     }
 }
 
-const mapStateToProps=(state)=>{
-    const {currentUser}=state
-    return {currentUser}
+const mapStateToProps = (state) => {
+    const { currentUser } = state
+    return { currentUser }
 }
 
-export default connect(mapStateToProps,{updateUser})(OwnProfile)
+export default connect(mapStateToProps, { updateUser })(OwnProfile)

@@ -10,6 +10,21 @@ import StudentImage from '../../asset/studentCard.png'
 import { connect } from 'react-redux'
 import { selectUser } from '../../store/actions/action'
 import {withRouter} from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+  card: {
+    maxWidth: 345,
+    borderColor: "steelblue",
+    borderWidth: 1,
+    borderStyle: "solid"
+  },
+  media: {
+    // ⚠️ object-fit is not supported by IE 11.
+    objectFit: 'cover',
+  },
+};
+
 
 class StudentCard extends Component {
 
@@ -20,24 +35,17 @@ class StudentCard extends Component {
   }
 
   render() {
-    const styles = {
-
-      media: {
-        // ⚠️ object-fit is not supported by IE 11.
-        objectFit: 'cover',
-      },
-    };
-
+    const {classes}=this.props
     return (
-      <Card style={{maxWidth: 345,borderColor: "steelblue",borderWidth: 1,borderStyle: "solid"}}>
+      <Card className={classes.card}>
         <CardActionArea>
           <CardMedia
             component="img"
             alt={this.props.data.firstname}
-            className={styles.media}
+            className={classes.media}
             height="140"
             image={StudentImage}
-            title="Contemplative Reptile"
+            title="Student"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -63,4 +71,4 @@ class StudentCard extends Component {
 }
 
 
-export default connect(null, { selectUser })(withRouter(StudentCard));
+export default connect(null, { selectUser })(withRouter(withStyles(styles)(StudentCard)));

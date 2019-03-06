@@ -22,11 +22,11 @@ const companyNavbar = (props) => {
             <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/company/profile">Profile</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/timeline/company">Applicants</NavLink>
+            <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/company/applicants">Applicants</NavLink>
           </li>
         </ul>
         <div className="nav-item">
-          <span>{props.currentUser.company}</span>
+          <span style={{fontWeight:"bold", marginRight: 10,}}>{props.currentUser.company}</span>
         </div>
         <div className="nav-item">
           <Avatar letters={props.currentUser.initials}/>

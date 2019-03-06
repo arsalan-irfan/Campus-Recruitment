@@ -4,64 +4,76 @@ import firebase from '../../config/FirebaseConfig';
 
 export const profileFetch = type => dispatch => {
 
-    console.log("Fetching " + type);
     firebase.database().ref(`/Users/${type}`)
         .on('value', res => {
             const Obj = res.val();
-            console.log("val: ", res.val());
             const profiles = [];
             for (let profile in Obj) {
                 profiles.push(Obj[profile])
             }
-            console.log(profiles)
             dispatch({ type: actionsTypes.FETCH_SUCCESS, payload: profiles });
         });
 
 };
 
 export const userAlreadySigned = (user, history) => {
-    console.log("In userAlreadySigned()", history)
+    let flag = true
     const { uid, type, status } = user;
     let data = {};
-    if (type === "Student")
-        history.replace("/timeline/student");
-    else
-        history.replace("/timeline/company");
-    return (dispatch) => {
-        firebase.database().ref(`Users/${type}/${uid}`)
-            .on("value", res => {
-                if (res.val()) {
-                    data = res.val()
-                    dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status } })
+    if (type === "Admin") {
+        return (dispatch) => {
+            dispatch({ type: actionsTypes.ADMIN_LOGIN, payload: status })
+        }
+    }
+    else {
+        if (type === "Student")
+            {
+                history.replace("/timeline/student");
+                flag=false
+            }
+        else if (type === "Company")
+                {
+                    history.replace("/timeline/company");
+                    flag=false
                 }
-            })
+        return (dispatch) => {
+            firebase.database().ref(`Users/${type}/${uid}`)
+                .on("value", res => {
+                    if (res.val()) {
+                        data = res.val()
+                        dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status } })
+                    }
+                })
+        }
+    }
+
+ 
+}
+export const applicantsFetch = (applicants, profiles) => {
+    return (dispatch) => {
+        const companyApplicants = profiles.filter(profile => applicants.find(element => element === profile.uuid))
+        dispatch({ type: actionsTypes.APPLICANTS_COMPANY, payload: companyApplicants })
     }
 }
 
 export const appliedFetch = (applied, profiles) => {
     return (dispatch) => {
-        console.log("In AppliedFetch")
         const appliedCompany = profiles.filter(profile => applied.find(element => element === profile.uuid))
-        console.log("In action appliedCompany", appliedCompany)
         dispatch({ type: actionsTypes.APPLIED_COMPANY, payload: appliedCompany })
     }
 }
 
 export const updateUser = (data, history) => {
-    console.log("In Update user")
     if (data.type === "Student") {
         data.initials = data.firstname[0] + data.lastname[0]
     }
     else {
         data.initials = data.company[0];
     }
-    console.log(data);
     firebase.database().ref(`/Users/${data.type}/${data.uuid}`).set(data)
         .then(res => {
-            console.log("success!")
         })
         .catch(err => {
-            console.log(err);
         })
 }
 
@@ -70,7 +82,6 @@ export const fetchAllUser = () => {
         firebase.database().ref('/Users/Student')
             .on("value", res => {
                 let students = []
-                console.log("std changed", res.val())
                 let studentObj = {}
                 studentObj = res.val()
                 for (let student in studentObj) {
@@ -79,29 +90,22 @@ export const fetchAllUser = () => {
                 firebase.database().ref('/Users/Company')
                     .on("value", res => {
                         let companies = []
-                        console.log("cmp changed")
                         let companyObj = {}
                         companyObj = res.val()
                         for (let company in companyObj) {
                             companies.push(companyObj[company])
                         }
-                        console.log("students:", students)
-                        console.log("companies:", companies)
-                        console.log("dispatching")
                         dispatch({ type: actionsTypes.FETCH_ALL_USERS, payload: { students: [...students], companies: [...companies] } })
                     })
             })
     }
 }
 export const applyCompany = (suid, cuid, applied, applicants) => {
-    console.log(suid, cuid)
     return (dispatch, getState) => {
         firebase.database().ref(`/Users/Student/${suid}/applied`)
             .set(applied).then(() => {
                 firebase.database().ref(`/Users/Company/${cuid}/applicants`)
                     .set(applicants).then(() => {
-                        console.log("updated", getState())
-                        console.log(applied)
                         dispatch({ type: actionsTypes.APPLIED_COMPANY, payload: applied })
                     })
             })
@@ -111,8 +115,9 @@ export const applyCompany = (suid, cuid, applied, applicants) => {
 
 export const createuser = (data, history, password) => {
     let status;
-    let type=data.type;
+    let type = data.type;
     return (dispatch) => {
+        dispatch({type:actionsTypes.CREATE_USER})
         let url = "/timeline/student"
         firebase.auth().createUserWithEmailAndPassword(data.email, password)
             .then(() => {
@@ -144,17 +149,15 @@ export const createuser = (data, history, password) => {
                             })
                     })
                     .catch((err) => {
-                        console.log("Insert data failed")
                         return dispatch({ type: actionsTypes.CREATE_USER_FAIL, payload: err.message })
 
                     });
             })
-            .catch((err) => dispatch({ type: actionsTypes.LOGIN_FAIL, payload: err.message }));
+            .catch((err) => dispatch({ type: actionsTypes.CREATE_USER_FAIL, payload: err.message }));
     }
 }
 
 export const loginUser = (email, password, history) => {
-    console.log(history);
     let data = {}
     let status;
     let type;
@@ -168,7 +171,7 @@ export const loginUser = (email, password, history) => {
                     status = 1
                     type = "Admin"
                     dispatch({ type: actionsTypes.ADMIN_LOGIN, payload: status })
-                    
+
                     let user = { uid, status, type }
                     localStorage.setItem("user", JSON.stringify(user));
                     history.replace('/timeline/admin')
@@ -179,26 +182,20 @@ export const loginUser = (email, password, history) => {
                         .on("value", res => {
                             if (res.val()) {
                                 data = res.val()
-                                console.log("Fetch Student Success: " + data.lastname)
-                                console.log("Fetch Student Success: " + status)
-                                status=2
+                                status = 2
                                 const payload = { data, status }
-                                console.log("payload", payload);
                                 dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload })
                                 type = "Student"
-                                
-                                console.log("navigating", history)
+
                                 let user = { uid, status, type }
                                 localStorage.setItem("user", JSON.stringify(user));
                                 history.replace("/timeline/student");
 
                             }
                             else {
-                                console.log("Data Not found in student db")
                                 firebase.database().ref(`Users/Company/${uid}`)
                                     .on("value", res => {
                                         if (res.val()) {
-                                            console.log("Fetch Company Success: " + res.val().company)
                                             data = res.val()
                                             status = 3
                                             type = "Company"
@@ -215,14 +212,12 @@ export const loginUser = (email, password, history) => {
 
             })
             .catch(err => {
-                console.log("failed!! " + err);
                 dispatch({ type: actionsTypes.LOGIN_FAIL, payload: err.message });
             });
 
     };
 }
 export const selectUser = (data) => {
-    console.log(data)
     return (dispatch) => {
         dispatch({ type: actionsTypes.SELECTED_PROFILE, payload: data })
     }
@@ -237,7 +232,6 @@ export const signOut = () => {
 
 export const setBlock = (type, uid, blockStatus) => {
     return (dispatch) => {
-        console.log(type, uid, blockStatus)
         firebase.database().ref(`/Users/${type}/${uid}/block`)
             .set(!blockStatus)
         // dispatch({type:actionsTypes.SET_BLOCK})

@@ -40,7 +40,7 @@ const AdminNav = (props) => {
                     </li>
                 </ul>
                 <div className="nav-item">
-                    <span>Admin</span>
+                    <span style={{fontWeight:"bold", marginRight: 10,}}>Admin</span>
                 </div>
 
                 <button className="btn btn-warning my-2 my-sm-0"

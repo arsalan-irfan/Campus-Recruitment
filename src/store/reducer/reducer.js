@@ -9,10 +9,22 @@ const initialState = {
     students:[],
     companies:[],
     appliedCompany:[],
+    companyApplicants:[],
     loading:false
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionsTypes.CREATE_USER:
+            return{
+                ...state,
+                loading:true
+            }
+        case actionsTypes.APPLICANTS_COMPANY:
+            console.log("payload",action.payload)
+            return{
+                ...state,
+                companyApplicants:action.payload
+            }
         case actionsTypes.APPLIED_COMPANY:
             console.log("payload",action.payload)
             return{
@@ -72,7 +84,12 @@ const reducer = (state = initialState, action) => {
                 error: action.payload,
                 loading:false
             }
-
+        case actionsTypes.CREATE_USER_FAIL:
+        return {
+            ...state,
+            error: action.payload,
+            loading:false
+        }
         case actionsTypes.SELECTED_PROFILE:
             return{
                 ...state,
