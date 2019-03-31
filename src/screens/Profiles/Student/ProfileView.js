@@ -3,6 +3,21 @@ import './Profile.css'
 import Input from '../../../components/Input';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    box: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: "center",
+        borderColor: "blue",
+        borderWidth: 1,
+        borderStyle: "solid",
+        padding: 10,
+        backgroundColor: "lightblue",
+        marginTop: 20,
+    }
+}
 
 class ProfileView extends Component {
 
@@ -13,13 +28,14 @@ class ProfileView extends Component {
     }
 
     render() {
+        const {classes}=this.props
         return (
             <div>
                 <div className="row">
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
-                        <div className="signup">
+                        <div className={classes.box}>
                             <div className="heading">
                                 <h3 className="text-center">Student Profile</h3>
                             </div>
@@ -123,4 +139,4 @@ const mapStateToProps = state => {
     const { selectedProfile } = state
     return { selectedProfile }
 }
-export default connect(mapStateToProps)(withRouter(ProfileView))
+export default connect(mapStateToProps)(withRouter(withStyles(style)(ProfileView)))

@@ -52,7 +52,6 @@ class CompanyCard extends Component {
 }
 
   render() {
-    console.log("-----------------------------------------------------")
     const styles = {
       card: {
         maxWidth: 345,
@@ -70,7 +69,6 @@ class CompanyCard extends Component {
     let temp = false;
     const {currentUser, data} = this.props;
     temp = currentUser.applied && isArray(currentUser.applied) ? currentUser.applied.find(apply => apply === data.uuid) : false;
-    console.log(data.company+"In temp:"+temp)
     if (temp) {
       applyBtn = { text: "Un Apply", flag: 2 }
     }

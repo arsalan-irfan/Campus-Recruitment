@@ -64,6 +64,7 @@ export const appliedFetch = (applied, profiles) => {
 }
 
 export const updateUser = (data, history) => {
+    console.log(data)
     if (data.type === "Student") {
         data.initials = data.firstname[0] + data.lastname[0]
     }
@@ -75,6 +76,8 @@ export const updateUser = (data, history) => {
         })
         .catch(err => {
         })
+    alert("Profile Updated Succesfully");
+    
 }
 
 export const fetchAllUser = () => {

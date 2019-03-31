@@ -7,7 +7,34 @@ import Input from '../../components/Input'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser } from '../../store/actions/action'
-import Spinner from '../../components/Spinner/Spinner'
+import Spinner from '../../components/Spinner/Spinner2'
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    loginBox: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: "center",
+        borderColor: "blue",
+        borderWidth: 1,
+        borderStyle: "solid",
+        padding: 10,
+        backgroundColor:'lightblue',
+        marginTop: 20,
+    },
+    mainHeading:{
+        color:"white",
+        backgroundColor: "steelblue",
+        borderColor:"black" ,
+        borderWidth: 1,
+        borderStyle: "solid",
+        width:"auto",
+        textAlign:"center",
+        fontWeight: "bold",
+        marginBottom: 10,
+    }
+}
+
 
 class Login extends Component {
     state = {
@@ -28,6 +55,7 @@ class Login extends Component {
     }
 
     render() {
+        const {classes} = this.props
         let disableStatus = true;
         let errMsg = null
 
@@ -43,14 +71,14 @@ class Login extends Component {
             disableStatus = false
         return (
             <div>
-                <div className="mainHeading">
+                <div className={classes.mainHeading}>
                     <h1>Campus Recruitment</h1>
                 </div>
                 <div className="row">
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
-                        <div className="login">
+                        <div className={classes.loginBox}>
                             <div className="heading">
                                 <h2 className="text-center">SignIn</h2>
                             </div>
@@ -78,13 +106,13 @@ class Login extends Component {
                             {(!this.props.loading
                             ?(
                                 <input type="button"
-                                className='btn btn-primary'
-                                value="Signin" style={{ width: "30%", }}
+                                className='btn btn-primary btn-lg'
+                                value="Sign in" 
                                 disabled={disableStatus}
                                 onClick={this.onLoginPressed}
                             />
                             )
-                            :(<Spinner />)
+                            :(<Spinner/>)
                             )}
 
                             </div>
@@ -125,4 +153,4 @@ const mapStateToProps = state => {
     return { loading, error }
 }
 
-export default connect(mapStateToProps, { loginUser })(Login)
+export default connect(mapStateToProps, { loginUser })(withStyles(style)(Login))

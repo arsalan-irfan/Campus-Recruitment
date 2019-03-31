@@ -5,7 +5,6 @@ import './Applied.css'
 import { appliedFetch } from '../../store/actions/action'
 import { connect } from 'react-redux'
 
-
 class Applied extends Component { 
   componentDidMount(){
     this.applyCompanyFetch();  
@@ -39,7 +38,7 @@ class Applied extends Component {
       <div>
         <Navbar />
         <br/><br />       
-        <div className="container text-center">
+        <div className="container text-center mt-5">
           <div className="card-container">
             {displayProfiles}
           </div>

@@ -4,6 +4,22 @@ import Input from '../../../components/Input';
 import { connect } from 'react-redux';
 import Navbar from '../../../components/Navbar/StudentNavbar'
 import { updateUser } from '../../../store/actions/action';
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    box: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: "center",
+        borderColor: "blue",
+        borderWidth: 1,
+        borderStyle: "solid",
+        padding: 10,
+        backgroundColor: "lightblue",
+        marginTop: 20,
+    }
+}
+
 class OwnProfile extends Component {
     state = {
         firstname: this.props.currentUser.firstname,
@@ -48,7 +64,7 @@ class OwnProfile extends Component {
                         if (firstname && lastname && email &&  institute && gpa && dob && degree && subject && type) {
                             let data = {}
                             const { currentUser } = this.props
-                            if (firstname === currentUser.firstname && lastname === currentUser.lastname && institute === currentUser.institute && gpa === currentUser.gpa && dob === currentUser.dob && subject === currentUser.subject) {
+                            if (firstname === currentUser.firstname && lastname === currentUser.lastname && institute === currentUser.institute &&  degree === currentUser.degree &&gpa === currentUser.gpa && dob === currentUser.dob && subject === currentUser.subject) {
                                 console.log("No changes is being made")
                                 this.setState({
                                     err: "No changes is being made"
@@ -58,7 +74,7 @@ class OwnProfile extends Component {
                                 this.setState({
                                     err: ""
                                 })
-                                data = { firstname, lastname, institute, email, applied, gpa, dob, block, initials, type, subject, uuid }
+                                data = { firstname, lastname, institute, email, applied, gpa, dob,degree, block, initials, type, subject, uuid }
                                 updateUser(data, this.props.history);
                             }
                         }
@@ -86,11 +102,12 @@ class OwnProfile extends Component {
             this.setError("Maximum length of firstname should be 15 characters")
         }
 
-
+        console.log(this.state)
 
     }
 
     render() {
+        const {classes}=this.props
         let errMsg = ""
         if (this.state.err) {
             errMsg = (
@@ -107,7 +124,7 @@ class OwnProfile extends Component {
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
-                        <div className="signup">
+                        <div className={classes.box}>
                             <div className="heading">
                                 <h3 className="text-center">{this.props.currentUser.firstname}'s Profile</h3>
                             </div>
@@ -117,7 +134,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Firstname"
-                                placeholder="Enter Firstname"
                                 value={this.state.firstname}
                                 disable={false}
                             />
@@ -127,7 +143,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Lastname"
-                                placeholder="Enter Lastname"
                                 value={this.state.lastname}
                                 disable={false}
                             />
@@ -138,7 +153,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Degree"
-                                placeholder="Degree"
                                 value={this.state.degree}
                                 disable={false}
                             />
@@ -148,7 +162,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Subject"
-                                placeholder="Subject"
                                 value={this.state.subject}
                                 disable={false}
                             />
@@ -158,7 +171,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Institute"
-                                placeholder="institute"
                                 value={this.state.institute}
                                 disable={false}
                             />
@@ -168,7 +180,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="GPA"
-                                placeholder="GPA"
                                 value={this.state.gpa}
                                 disable={false}
                             />
@@ -178,7 +189,6 @@ class OwnProfile extends Component {
                                 styleInput="form-control inputStyle"
                                 onChange={this.onHandleChange}
                                 label="Date Of Birth"
-                                placeholder="Date Of Birth"
                                 value={this.state.dob}
                                 disable={false}
                             />
@@ -203,4 +213,4 @@ const mapStateToProps = (state) => {
     return { currentUser }
 }
 
-export default connect(mapStateToProps, { updateUser })(OwnProfile)
+export default connect(mapStateToProps, { updateUser })(withStyles(style)(OwnProfile))

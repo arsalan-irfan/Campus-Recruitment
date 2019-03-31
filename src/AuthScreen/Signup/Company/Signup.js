@@ -3,7 +3,33 @@ import './Signup.css'
 import Input from '../../../components/Input'
 import { createuser } from '../../../store/actions/action'
 import { connect } from 'react-redux'
-import Spinner from '../../../components/Spinner/Spinner'
+import Spinner from '../../../components/Spinner/Spinner2'
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    signupBox: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: "center",
+        borderColor: "blue",
+        borderWidth: 1,
+        borderStyle: "solid",
+        padding: 10,
+        backgroundColor: "lightblue",
+        marginTop: 20,
+    },
+    mainHeading:{
+        color:"white",
+        backgroundColor: "steelblue",
+        borderColor:"black" ,
+        borderWidth: 1,
+        borderStyle: "solid",
+        width:"auto",
+        textAlign:"center",
+        fontWeight: "bold",
+        marginBottom: 10,
+    }
+}
 
 class Signup extends Component {
     state = {
@@ -57,19 +83,20 @@ class Signup extends Component {
 
     }
     render() {
+        const {classes}=this.props
         let errMsg = ""
         let displayButton = (
             <div className="btnGroup">
-                <input type="button" className='btn btn-primary ' value="Signup" style={{ width: "30%", marginRight: 10 }}
+                <input type="button" className='btn btn-primary  btn-lg' value="Signup" 
                     onClick={this.onSubmitHandler}
                 />
-                <input type="button" className='btn btn-primary ' value="Back" style={{ width: "30%", }}
-                    onClick={this.onSubmitHandler}
+                <input type="button" className='btn btn-primary btn-lg ' value="Back" style={{marginLeft:20}} 
+                    onClick={()=>{this.props.history.replace('/signin')}}
                 />
             </div>
         )
-        if(this.props.loading){
-            displayButton=<Spinner />
+        if (this.props.loading) {
+            displayButton = <Spinner />
         }
         console.log(this.props.error)
         if (this.state.err) {
@@ -94,11 +121,14 @@ class Signup extends Component {
         }
         return (
             <div>
+                <div className={classes.mainHeading}>
+                    <h1>Campus Recruitment</h1>
+                </div>
                 <div className="row">
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
-                        <div className="signup">
+                        <div className={classes.signupBox}>
                             <div className="heading">
                                 <h3 className="text-center">Company Signup</h3>
                             </div>
@@ -171,7 +201,7 @@ class Signup extends Component {
     }
 }
 const mapStateToProps = state => {
-    const { error,loading } = state
-    return { error,loading }
+    const { error, loading } = state
+    return { error, loading }
 }
-export default connect(mapStateToProps, { createuser })(Signup)
+export default connect(mapStateToProps, { createuser })(withStyles(style)(Signup))

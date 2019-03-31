@@ -4,6 +4,22 @@ import Input from '../../../components/Input'
 import { connect } from 'react-redux'
 import { updateUser } from '../../../store/actions/action'
 import Navbar from '../../../components/Navbar/CompanyNavbar'
+import { withStyles } from '@material-ui/core/styles';
+
+const style = {
+    box: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: "center",
+        borderColor: "blue",
+        borderWidth: 1,
+        borderStyle: "solid",
+        padding: 10,
+        backgroundColor: "lightblue",
+        marginTop: 20,
+    }
+}
+
 class OwnProfile extends Component {
 
     state = {
@@ -63,6 +79,7 @@ class OwnProfile extends Component {
     }
 
     render() {
+        const {classes}=this.props
         let errMsg = ""
         if (this.state.err) {
             errMsg = (
@@ -78,7 +95,7 @@ class OwnProfile extends Component {
                     <div className='col-2'>
                     </div>
                     <div className='col-8'>
-                        <div className="signup">
+                        <div className={classes.box}>
                             <div className="heading">
                                 <h3 className="text-center">{this.props.currentUser.company} Profile</h3>
                             </div>
@@ -142,4 +159,4 @@ const mapStateToProps = state => {
     const { currentUser } = state
     return { currentUser }
 }
-export default connect(mapStateToProps, { updateUser })(OwnProfile)
+export default connect(mapStateToProps, { updateUser })(withStyles(style)(OwnProfile))
