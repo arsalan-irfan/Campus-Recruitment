@@ -69,12 +69,12 @@ class StudentCard extends Component {
           </CardContent>
         </CardActionArea>
         <CardActions>
-        <Button size="medium" color="primary"
+        <Button size="medium" color="primary" variant="contained"
             onClick={this.onSelectUser}
         >
           View
         </Button>
-          <Button size="small" color="primary" style={{ textAlign: "center" }}
+          <Button size="small" color="primary" style={{ textAlign: "center" }} variant="contained"
             onClick={this.onBlockPressed}
           > {buttonTxt}
         </Button>

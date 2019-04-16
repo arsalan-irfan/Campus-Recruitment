@@ -6,12 +6,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import StudentImage from '../../asset/studentCard.png'
-import { connect } from 'react-redux'
-import { selectUser } from '../../store/actions/action'
+import JobImage from '../../asset/job.jpg'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
-
+import {selectJob,deleteJob} from '../../store/actions/action'
 const styles = {
   card: {
     maxWidth: 345,
@@ -26,14 +25,23 @@ const styles = {
 };
 
 
-class StudentCard extends Component {
+class JobCard extends Component {
 
-  onSelectUser = () => {
+  onSelectJob = () => {
     const { data} = this.props;
-    this.props.selectUser(data);
-    this.props.history.replace(`/company/student/profile/${data.uuid}`)
+    this.props.selectJob(data);
+    this.props.history.replace(`/job/view/${data.jobid}`)
   }
-
+  onDeleteJob=()=>{
+    const {data}=this.props;
+    let currentJobs=[];
+    const { jobs,uuid } = this.props.currentUser
+    for (let job in jobs) {
+      currentJobs.push(jobs[job])
+    }
+    console.log(currentJobs)
+    deleteJob(currentJobs,uuid,data.jobid)
+  }
   render() {
     const {classes}=this.props
     return (
@@ -41,34 +49,33 @@ class StudentCard extends Component {
         <CardActionArea>
           <CardMedia
             component="img"
-            alt={this.props.data.firstname}
+            alt={this.props.data.title}
             className={classes.media}
             height="140"
-            image={StudentImage}
-            title="Student"
-          />
+            image={JobImage}
+            title="Job"          />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              {this.props.data.firstname} {this.props.data.lastname}
-            </Typography>
-            <Typography component="p">
-              <b>GPA:</b>{this.props.data.gpa}
-            </Typography>
-            <Typography component="p">
-              <b>Degree:</b>{this.props.data.degree}
-            </Typography>
+              {this.props.data.title}
+            </Typography>            
           </CardContent>
         </CardActionArea>
         <CardActions>
           <Button size="small" color="primary" style={{ textAlign: "center" }} variant="contained"
-            onClick={this.onSelectUser}
+            onClick={this.onSelectJob}
           > View
+        </Button>
+        <Button size="small" color="secondary" style={{ textAlign: "center" }} variant="contained"
+        onClick={this.onDeleteJob}
+        > Delete
         </Button>
         </CardActions>
       </Card>
     );
   }
 }
-
-
-export default connect(null, { selectUser })(withRouter(withStyles(styles)(StudentCard)));
+const mapStateToProps = (state) => {
+  const { currentUser } = state;
+  return { currentUser }
+}
+export default connect(mapStateToProps, { selectJob,deleteJob })(withRouter(withStyles(styles)(JobCard)));

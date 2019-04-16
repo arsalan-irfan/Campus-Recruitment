@@ -1,7 +1,20 @@
 import actionsTypes from '../actions/types';
 import firebase from '../../config/FirebaseConfig';
 
-
+export const deleteJob=(currentJobs,uid,id)=>{
+    console.log("jobid=",id)
+    console.log("uid=",uid)
+    console.log("currentJobs=",currentJobs)
+    console.log("In Action")
+    let jobs = currentJobs.filter(job=>{
+        
+        return job.jobid !== id;
+    })
+    console.log(jobs)
+    
+    firebase.database().ref(`/Users/Company/${uid}/jobs`)
+    .set(jobs)
+}
 export const profileFetch = type => dispatch => {
 
     firebase.database().ref(`/Users/${type}`)
@@ -26,16 +39,14 @@ export const userAlreadySigned = (user, history) => {
         }
     }
     else {
-        if (type === "Student")
-            {
-                history.replace("/timeline/student");
-                flag=false
-            }
-        else if (type === "Company")
-                {
-                    history.replace("/timeline/company");
-                    flag=false
-                }
+        if (type === "Student") {
+            history.replace("/timeline/student");
+            flag = false
+        }
+        else if (type === "Company") {
+            history.replace("/timeline/company");
+            flag = false
+        }
         return (dispatch) => {
             firebase.database().ref(`Users/${type}/${uid}`)
                 .on("value", res => {
@@ -47,7 +58,7 @@ export const userAlreadySigned = (user, history) => {
         }
     }
 
- 
+
 }
 export const applicantsFetch = (applicants, profiles) => {
     return (dispatch) => {
@@ -72,12 +83,9 @@ export const updateUser = (data, history) => {
         data.initials = data.company[0];
     }
     firebase.database().ref(`/Users/${data.type}/${data.uuid}`).set(data)
-        .then(res => {
-        })
-        .catch(err => {
-        })
+
     alert("Profile Updated Succesfully");
-    
+
 }
 
 export const fetchAllUser = () => {
@@ -120,7 +128,7 @@ export const createuser = (data, history, password) => {
     let status;
     let type = data.type;
     return (dispatch) => {
-        dispatch({type:actionsTypes.CREATE_USER})
+        dispatch({ type: actionsTypes.CREATE_USER })
         let url = "/timeline/student"
         firebase.auth().createUserWithEmailAndPassword(data.email, password)
             .then(() => {
@@ -225,6 +233,11 @@ export const selectUser = (data) => {
         dispatch({ type: actionsTypes.SELECTED_PROFILE, payload: data })
     }
 }
+export const selectJob = (data) => {
+    return (dispatch) => {
+        dispatch({ type: actionsTypes.SELECTED_JOB, payload: data })
+    }
+}
 export const signOut = () => {
     return (dispatch) => {
         firebase.auth().signOut()
@@ -240,4 +253,13 @@ export const setBlock = (type, uid, blockStatus) => {
         // dispatch({type:actionsTypes.SET_BLOCK})
     }
 
+}
+export const onJobPost = (data) => {
+    return (dispatch) => {
+        const { currentUser } = firebase.auth();
+        const uid = currentUser.uid;
+        firebase.database().ref(`/Users/Company/${uid}/jobs/${data.jobid}`)
+            .set(data)
+
+    }
 }

@@ -18,7 +18,9 @@ import BlockedCompany from './screens/TimeLine/Admin/Company/BlockCompany'
 import UnblockCompany from './screens/TimeLine/Admin/Company/UnblockCompany'
 import AppliedCompany from './screens/Applied/Applied'
 import Applicants from './screens/Applicants/Applicants'
-
+import CreateJob from './screens/PostJob/CreateJob'
+import CompanyJobs from './screens/Jobs/Jobs'
+import JobView from './screens/JobView/JobView'
 
 const getRoutes = status => {
 
@@ -69,7 +71,12 @@ const getRoutes = status => {
           <Route path="/company/profile" exact component={CompanyProfile} />          
           <Route path="/company/applicants" exact component={Applicants}/>
           <Route path="/company/student/profile/:id" component={StudentView} />
+          <Route path="/company/postjob" component={CreateJob} />
+          <Route path="/company/jobs" component={CompanyJobs} />
+          <Route path="/job/view/:id" component={JobView} />
+          
           <Redirect to="/timeline/company" />
+
         </Switch>
       );
     }

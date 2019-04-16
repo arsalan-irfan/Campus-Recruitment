@@ -93,12 +93,12 @@ class CompanyCard extends Component {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="medium" color="primary"
+          <Button size="medium" color="primary" variant="contained"
             onClick={this.onSelectUser}
           >
             View
         </Button>
-          <Button size="medium" color="primary"
+          <Button size="medium" color="primary" variant="contained"
             onClick={() =>this.onApply(applyBtn.flag)}
             disabled={this.props.currentUser.block}
           >
