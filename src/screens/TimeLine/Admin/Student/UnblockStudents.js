@@ -16,10 +16,10 @@ class UnblockStudents extends Component {
             <div>
                 <Navbar />
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-1">
 
                     </div>
-                    <div className="col-8">
+                    <div className="col-10">
                         <div className="heading">
                             <h3 className="text-center">Blocked Students</h3>
                         </div>
@@ -28,7 +28,7 @@ class UnblockStudents extends Component {
                         </div>
 
                     </div>
-                    <div className="col-2">
+                    <div className="col-1">
 
                     </div>
                 </div>

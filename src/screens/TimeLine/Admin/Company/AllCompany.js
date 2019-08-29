@@ -13,10 +13,10 @@ class AllCompany extends Component {
             <div>
                 <Navbar />
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-1">
 
                     </div>
-                    <div className="col-8">
+                    <div className="col-10">
                         <div className="heading">
                             <h3 className="text-center">All Company</h3>
                         </div>
@@ -25,7 +25,7 @@ class AllCompany extends Component {
                         </div>
 
                     </div>
-                    <div className="col-2">
+                    <div className="col-1">
 
                     </div>
                 </div>
