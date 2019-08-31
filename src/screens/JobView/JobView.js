@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import CompanyNavbar from '../../components/Navbar/CompanyNavbar'
+import StudentNavbar from '../../components/Navbar/StudentNavbar'
 export class JobView extends Component {
   render() {
     const {title,seats,description,email,company,salary}=this.props.selectedJob
+    const userType = this.props.currentUser.type
     return (
       <div>
-        <CompanyNavbar />
-    
+        {userType=='Company'?<CompanyNavbar />:<StudentNavbar />}
+
         <div className='container' style={{marginTop:100}}>
             <h2 style={{color:'steelblue'}}>{title}</h2>
             <p style={{fontSize:20}}><span style={{fontWeight:"bold",color:'steelblue'}}>Company: </span>{company}</p>
@@ -28,8 +30,9 @@ export class JobView extends Component {
 }
 
 const mapStateToProps=state=>{
-    const {selectedJob} = state;
-    return {selectedJob} 
+    const {selectedJob,currentUser} = state;
+
+    return {selectedJob,currentUser} 
 }
 
 export default connect(mapStateToProps)(JobView)

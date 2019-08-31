@@ -1,19 +1,19 @@
 import actionsTypes from '../actions/types';
 import firebase from '../../config/FirebaseConfig';
 
-export const deleteJob=(currentJobs,uid,id)=>{
-    console.log("jobid=",id)
-    console.log("uid=",uid)
-    console.log("currentJobs=",currentJobs)
+export const deleteJob = (currentJobs, uid, id) => {
+    console.log("jobid=", id)
+    console.log("uid=", uid)
+    console.log("currentJobs=", currentJobs)
     console.log("In Action")
-    let jobs = currentJobs.filter(job=>{
-        
+    let jobs = currentJobs.filter(job => {
+
         return job.jobid !== id;
     })
     console.log(jobs)
-    
+
     firebase.database().ref(`/Users/Company/${uid}/jobs`)
-    .set(jobs)
+        .set(jobs)
 }
 export const profileFetch = type => dispatch => {
 
@@ -52,7 +52,16 @@ export const userAlreadySigned = (user, history) => {
                 .on("value", res => {
                     if (res.val()) {
                         data = res.val()
-                        dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status } })
+                        let applied = []  
+                        if (data.type === 'Student') {
+                            if (data.applied) {
+                                for (let company in data.applied) {
+                                    console.log(company)
+                                    applied.push(data.applied[company])
+                                }
+                            }
+                        }
+                        dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status,applied } })
                     }
                 })
         }
@@ -113,10 +122,11 @@ export const fetchAllUser = () => {
 }
 export const applyCompany = (suid, cuid, applied, applicants) => {
     return (dispatch, getState) => {
-        firebase.database().ref(`/Users/Student/${suid}/applied`)
+        firebase.database().ref(`/Users/Student/${suid}/applied/`)
             .set(applied).then(() => {
                 firebase.database().ref(`/Users/Company/${cuid}/applicants`)
                     .set(applicants).then(() => {
+                        console.log(applicants)
                         dispatch({ type: actionsTypes.APPLIED_COMPANY, payload: applied })
                     })
             })
@@ -194,7 +204,15 @@ export const loginUser = (email, password, history) => {
                             if (res.val()) {
                                 data = res.val()
                                 status = 2
-                                const payload = { data, status }
+                                let applied = []
+                                console.log(data.applied)
+                                if (data.applied) {
+                                    // for (let company in data.applied) { 
+                                    //     applied.push(data.appplied[company]);
+                                    // }
+                                    applied=data.applied
+                                }
+                                const payload = { data, status, applied }
                                 dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload })
                                 type = "Student"
 

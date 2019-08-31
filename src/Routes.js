@@ -58,6 +58,7 @@ const getRoutes = status => {
           <Route path="/student/profile" exact component={StudentProfile} />          
           <Route path="/student/applied" exact component={AppliedCompany} />
           <Route path="/student/company/profile/:id" component={CompanyView} />
+          <Route path="/job/view/:id" component={JobView} />          
           <Redirect to="/timeline/student" />
         </Switch>
       );

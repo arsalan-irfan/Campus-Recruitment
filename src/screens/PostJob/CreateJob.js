@@ -8,7 +8,7 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux'
 import {onJobPost} from '../../store/actions/action'
-import uuid from 'uuid';
+import uid from 'uuid';
 
 const styles = theme => ({
     button: {
@@ -73,9 +73,10 @@ class CreateJob extends Component {
                     err: '',
                     open: false
                 })
-                const {company,email} = this.props.currentUser
-                var jobid=uuid.v4();
-                this.props.onJobPost({title,description,seats,salary,jobid,company,email})
+                const {company,email,uuid} = this.props.currentUser
+                var jobid=uid.v4();
+                var cid = uuid;
+                this.props.onJobPost({title,description,seats,salary,jobid,company,email,cid})
                 alert("Job Posted Successfully!")
             }
 
