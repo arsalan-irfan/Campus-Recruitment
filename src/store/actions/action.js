@@ -53,6 +53,7 @@ export const userAlreadySigned = (user, history) => {
                     if (res.val()) {
                         data = res.val()
                         let applied = []  
+                        let applicants =[];
                         if (data.type === 'Student') {
                             if (data.applied) {
                                 for (let company in data.applied) {
@@ -61,7 +62,15 @@ export const userAlreadySigned = (user, history) => {
                                 }
                             }
                         }
-                        dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status,applied } })
+                        if (data.type === 'Company') {
+                            if (data.applicants) {
+                                for (let students in data.applicants) {
+                                    console.log(students)
+                                    applicants.push(data.applicants[students])
+                                }
+                            }
+                        }
+                        dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status,applied,applicants } })
                     }
                 })
         }
@@ -205,14 +214,14 @@ export const loginUser = (email, password, history) => {
                                 data = res.val()
                                 status = 2
                                 let applied = []
-                                console.log(data.applied)
+                                let applicants=[]
                                 if (data.applied) {
                                     // for (let company in data.applied) { 
                                     //     applied.push(data.appplied[company]);
                                     // }
                                     applied=data.applied
                                 }
-                                const payload = { data, status, applied }
+                                const payload = { data, status, applied,applicants }
                                 dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload })
                                 type = "Student"
 
@@ -222,13 +231,21 @@ export const loginUser = (email, password, history) => {
 
                             }
                             else {
+                                let applied = []
+                                let applicants=[]
                                 firebase.database().ref(`Users/Company/${uid}`)
                                     .on("value", res => {
                                         if (res.val()) {
                                             data = res.val()
                                             status = 3
                                             type = "Company"
-                                            dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status } })
+                                            if (data.applicants) {
+                                                for (let students in data.applicants) {
+                                                    console.log(students)
+                                                    applicants.push(data.applicants[students])
+                                                }
+                                            }                
+                                            dispatch({ type: actionsTypes.LOGIN_SUCCESS, payload: { data, status,applied,applicants } })
                                             history.replace("/timeline/student");
 
                                             let user = { uid, status, type }

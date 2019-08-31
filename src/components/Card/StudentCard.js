@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import StudentImage from '../../asset/studentCard.png'
 import { connect } from 'react-redux'
 import { selectUser } from '../../store/actions/action'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
@@ -27,48 +27,67 @@ const styles = {
 
 
 class StudentCard extends Component {
+  state = {
+    currentStudentIndex: null
+  }
 
+  componentDidMount() {
+    let currentStudentIndex = ''
+    console.log('Hello')
+    currentStudentIndex = this.props.profiles.filter(student => {
+      // console.log('Comparision '+this.props.data.uuid+ ' === ' + student.uuid)
+      return this.props.data.uuid === student.uuid
+    })
+    this.setState({
+      currentStudentIndex:currentStudentIndex[0].block
+    })
+
+  }
   onSelectUser = () => {
-    const { data} = this.props;
+    const { data } = this.props;
     this.props.selectUser(data);
     this.props.history.replace(`/company/student/profile/${data.uuid}`)
   }
 
   render() {
-    const {classes}=this.props
-    return (
-      <Card className={classes.card}>
-        <CardActionArea>
-          <CardMedia
-            component="img"
-            alt={this.props.data.firstname}
-            className={classes.media}
-            height="140"
-            image={StudentImage}
-            title="Student"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {this.props.data.firstname} {this.props.data.lastname}
-            </Typography>
-            <Typography component="p">
-              <b>GPA:</b>{this.props.data.gpa}
-            </Typography>
-            <Typography component="p">
-              <b>Degree:</b>{this.props.data.degree}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary" style={{ textAlign: "center" }} variant="contained"
-            onClick={this.onSelectUser}
-          > View
+    const { classes, data, profiles } = this.props
+    return ( 
+      <div>
+        {this.state.currentStudentIndex? null:(<Card className={classes.card}>
+        {/* <Card className={classes.card}> */}
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              alt={this.props.data.firstname}
+              className={classes.media}
+              height="140"
+              image={StudentImage}
+              title="Student"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                {this.props.data.firstname} {this.props.data.lastname}
+              </Typography>
+              <Typography component="p">
+                <b>Applied For:</b>{this.props.data.jobTitle}
+              </Typography>
+
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="primary" style={{ textAlign: "center" }} variant="contained"
+              onClick={this.onSelectUser}
+            > View
         </Button>
-        </CardActions>
-      </Card>
+          </CardActions>
+        </Card>)}
+      </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  const { profiles } = state;
+  return { profiles }
+}
 
-
-export default connect(null, { selectUser })(withRouter(withStyles(styles)(StudentCard)));
+export default connect(mapStateToProps, { selectUser })(withRouter(withStyles(styles)(StudentCard)));

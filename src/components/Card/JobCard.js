@@ -28,7 +28,7 @@ const styles = {
 class JobCard extends Component {
 
   onApplyJob = async () => {
-    const { degree, dob, email, firstname, lastname, gpa, initials, institute, subject, type, uuid } = this.props.currentUser
+    const { degree, dob, email, firstname, lastname, gpa, initials, institute, subject, type, uuid,block } = this.props.currentUser
     let { sid, data, appliedCompany,profiles,currentUser} = this.props;
     let applicants=[];
     let index;
@@ -50,14 +50,16 @@ class JobCard extends Component {
         return job.jobid === data.jobid
       })
     }
+    //Apply
     if (index === -1) {
       let jobTitle = data.title;
       let jobid=data.jobid;
-      let studentData = { degree, dob, email, firstname, lastname, gpa, initials, institute, subject, type, uuid, jobTitle,jobid }
+      let studentData = { degree, dob, email, firstname, lastname, gpa, initials, institute, subject, type, uuid, jobTitle,jobid,block }
       applicants.push(studentData);
       appliedCompany.push(data);
       await this.props.applyCompany(sid, data.cid, appliedCompany, applicants);
     }
+    //Un Apply
     else{
       appliedCompany=appliedCompany.filter(job=>{
         return job.jobid!==data.jobid
@@ -89,6 +91,9 @@ class JobCard extends Component {
     const { appliedCompany, data, currentUser } = this.props;
     const userType = currentUser.type
     if(userType==='Student'&&currentUser.block){
+      disableBtn=true 
+    }
+    if(userType==='Company'&&currentUser.block){
       disableBtn=true 
     }
     let index = '';
@@ -129,7 +134,7 @@ class JobCard extends Component {
         <CardActions>
           <Button size="small" color="primary" style={{ textAlign: "center" }} variant="contained"
             onClick={this.onSelectJob}
-            disabled={disableBtn}
+            disabled={userType==='Student'?disableBtn:false}
           > View
         </Button>
           <Button size="small" color="secondary" style={{ textAlign: "center" }} variant="contained"

@@ -11,7 +11,7 @@ class Company extends Component {
         let block = null
         let displayJobs = ""
         if (this.props.currentUser.block) {
-            blockMsg = "Note:You are blocked by admin so your profile will not be visible to Students and some features might be un available"
+            blockMsg = "Note:You are blocked by admin so your jobs will not be visible to Students and some features might be un available"
             block = (
                 <div className="alert alert-warning mt-5 " role="alert">
                     {blockMsg}

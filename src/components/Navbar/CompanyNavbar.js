@@ -16,13 +16,10 @@ const companyNavbar = (props) => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/timeline/company">Home</NavLink>
+            <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/timeline/company">Applicants</NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/company/profile">Profile</NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/company/applicants">Applicants</NavLink>
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" activeStyle={{ color: 'white',fontWeight:"bold" }} to="/company/postjob">Post Job</NavLink>

@@ -69,13 +69,14 @@ const reducer = (state = initialState, action) => {
 
 
         case actionsTypes.LOGIN_SUCCESS:
-            const { data, status,applied } = action.payload
+            const { data, status,applied,applicants } = action.payload
             console.log(status);
             return {
                 ...state,
                 currentUser: data,
                 status,
                 appliedCompany:applied,
+                companyApplicants:applicants,
                 loading: false
             }
 

@@ -6,8 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
-import {connect} from 'react-redux'
-import {onJobPost} from '../../store/actions/action'
+import { connect } from 'react-redux'
+import { onJobPost } from '../../store/actions/action'
 import uid from 'uuid';
 
 const styles = theme => ({
@@ -73,10 +73,10 @@ class CreateJob extends Component {
                     err: '',
                     open: false
                 })
-                const {company,email,uuid} = this.props.currentUser
-                var jobid=uid.v4();
+                const { company, email, uuid } = this.props.currentUser
+                var jobid = uid.v4();
                 var cid = uuid;
-                this.props.onJobPost({title,description,seats,salary,jobid,company,email,cid})
+                this.props.onJobPost({ title, description, seats, salary, jobid, company, email, cid })
                 alert("Job Posted Successfully!")
             }
 
@@ -98,9 +98,19 @@ class CreateJob extends Component {
     }
 
     render() {
+        let blockMsg = ""
+        let block = null;
+        if(this.props.currentUser.block){
+            blockMsg="Note:You are blocked by admin so your jobs will not be visible to Students and some features might be un available"
+            block=(
+              <div className="alert alert-warning mt-5 " role="alert">
+                    {blockMsg}
+                  </div>
+            )
+          }
         const { classes } = this.props;
         let errMsg = null
-
+        const displayForm = <h3 style={{ color: "red" }}>Your Company is unable to post a job in block mode</h3>
         if (this.state.err) {
             errMsg = (
                 <div className="alert alert-danger" role="alert">
@@ -112,9 +122,10 @@ class CreateJob extends Component {
             <div >
                 <Navbar />
                 <div className="container" style={{ marginTop: "10%" }}>
+                    {blockMsg}
                     {errMsg}
-                    <h3>Post New Job</h3>
-                    <form onSubmit={this.onSubmit}>
+                    <h3>{this.props.currentUser.block?'':'Post New Job'}</h3>
+                    {this.props.currentUser.block ? displayForm : (<form onSubmit={this.onSubmit}>
 
                         <div className="form-group">
                             <label>Job Title: </label>
@@ -174,7 +185,7 @@ class CreateJob extends Component {
                         <div className="form-group">
                             <input type="submit" value="Submit Job" className="btn btn-primary" />
                         </div>
-                    </form>
+                    </form>)}
                 </div>
             </div>
         )
@@ -186,4 +197,4 @@ const mapStateToProps = (state) => {
     return { currentUser }
 }
 
-export default connect(mapStateToProps,{onJobPost})(withStyles(styles)(CreateJob))
+export default connect(mapStateToProps, { onJobPost })(withStyles(styles)(CreateJob))
