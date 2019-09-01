@@ -163,6 +163,7 @@ class Signup extends Component {
                                 onChange={this.onHandleChange}
                                 label="Firstname"
                                 placeholder="Enter Firstname"
+                                maxlength="15"
                             />
                             <Input
                                 type="text"
@@ -171,6 +172,7 @@ class Signup extends Component {
                                 onChange={this.onHandleChange}
                                 label="Lastname"
                                 placeholder="Enter Lastname"
+                                maxlength="15"
                             />
                             <Input
                                 type="email"

@@ -16,6 +16,7 @@ class Input extends Component {
                     <input type={this.props.type} className={this.props.styleInput} id={this.props.field} placeholder={this.props.placeholder} required onChange={this.onFieldChange} 
                     disabled={this.props.disable}
                     value={this.props.value}
+                    maxLength={this.props.maxLength}
                     />
                 </div>
             </div>

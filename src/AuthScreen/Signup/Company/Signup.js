@@ -164,6 +164,7 @@ class Signup extends Component {
                                 onChange={this.onHandleChange}
                                 label="Company Name"
                                 placeholder="Company"
+                                maxLength='30'
                             />
                             <Input
                                 type="text"

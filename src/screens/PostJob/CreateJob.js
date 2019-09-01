@@ -135,7 +135,7 @@ class CreateJob extends Component {
                                 id="title"
                                 value={this.state.title}
                                 onChange={this.onHandleChange}
-                                maxLength="40"
+                                maxLength="30"
                             />
                             <small style={{ color: 'red' }}>*Max length 40</small>
                         </div>
